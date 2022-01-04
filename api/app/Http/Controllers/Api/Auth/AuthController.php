@@ -28,7 +28,7 @@ class AuthController
 
         return response()->json(
             [
-                'user'  => new UserResource($user),
+                'user_id'  => $user->id,
                 'token' => $token,
             ]
         );

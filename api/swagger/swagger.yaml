@@ -105,18 +105,9 @@ components:
           schema:
             type: object
             properties:
-              user:
-                type: object
-                properties:
-                  full_name:
-                    type: string
-                    example: "Владислав Клименко"
-                  email:
-                    type: string
-                    example: "klimlugvlad98228@gmail.com"
-                  id:
-                    type: integer
-                    example: 2
+              user_id:
+                type: integer
+                example: 2
               token:
                 type: string
                 example: '5|W38JHlqrquIPKESYT56K4fn1XSSzPqFB36rd7vOk'

@@ -1,0 +1,140 @@
+openapi: 3.0.0
+info:
+  version: "1.0"
+  title: Back thesis documentation
+  description: Документация back-thesis сервиса
+  contact:
+    name: Vladislav Klimenko
+    email: klimlugvlad98228@gmail.com
+  license:
+    name: proprietary
+
+servers:
+  - url: http://0.0.0.0:80/
+    description: thesis localhost
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: public
+    description: Публичное API
+
+paths:
+
+  /resister:
+    post:
+      summary: Регистрация пользователя
+      security: [ ]
+      tags:
+        - Auth
+      requestBody:
+        $ref: '#/components/requestBodies/RegisterBody'
+      responses:
+        200:
+          $ref: '#/components/responses/RegisterResponse'
+
+  /login:
+    post:
+      summary: Авторизация пользователя
+      security: [ ]
+      tags:
+        - Auth
+      requestBody:
+        $ref: '#/components/requestBodies/LoginBody'
+      responses:
+        200:
+          $ref: '#/components/responses/LoginResponse'
+
+components:
+
+  schemas:
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор
+        full_name:
+          type: string
+          description: ФИО
+        email:
+          type: string
+          description: Email
+
+  requestBodies:
+
+    LoginBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                example: "klimlugvlad98228@gmail.com"
+              password:
+                type: string
+                example: "klimlugvlad98228"
+
+    RegisterBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              full_name:
+                type: string
+                example: "Владислав Клименко"
+              email:
+                type: string
+                example: "klimlugvlad98228@gmail.com"
+              password:
+                type: string
+                example: "klimlugvlad98228"
+
+  responses:
+
+    RegisterResponse:
+      description: Успешный ответ
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              user:
+                type: object
+                properties:
+                  full_name:
+                    type: string
+                    example: "Владислав Клименко"
+                  email:
+                    type: string
+                    example: "klimlugvlad98228@gmail.com"
+                  id:
+                    type: integer
+                    example: 2
+              token:
+                type: string
+                example: '5|W38JHlqrquIPKESYT56K4fn1XSSzPqFB36rd7vOk'
+
+
+    LoginResponse:
+      description: Успешный ответ
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                example: "5|W38JHlqrquIPKESYT56K4fn1XSSzPqFB36rd7vOk"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

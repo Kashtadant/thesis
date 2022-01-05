@@ -46,6 +46,25 @@ paths:
         200:
           $ref: '#/components/responses/LoginResponse'
 
+  /users:
+    get:
+      summary: Получение списка пользователей
+      security: [ ]
+      tags:
+        - Users
+      responses:
+        200:
+          $ref: '#/components/responses/UsersResponse'
+
+  /users/{user_id}:
+    get:
+      summary: Получение пользователя по user_id
+      security: [ ]
+      tags:
+        - Users
+      responses:
+        200:
+          $ref: '#/components/responses/UserResponse'
 components:
 
   schemas:
@@ -123,6 +142,28 @@ components:
               token:
                 type: string
                 example: "5|W38JHlqrquIPKESYT56K4fn1XSSzPqFB36rd7vOk"
+
+    UsersResponse:
+      description: Успешный ответ
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+    UserResponse:
+      description: Успешный ответ
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/User'
 
   securitySchemes:
     bearerAuth:

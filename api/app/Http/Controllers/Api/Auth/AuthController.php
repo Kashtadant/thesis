@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Resources\Api\Auth\UserResource;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\JsonResponse;

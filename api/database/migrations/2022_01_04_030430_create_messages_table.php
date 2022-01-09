@@ -10,7 +10,8 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('room_id');
             $table->enum('type', ['message', 'poll', 'result']);
             $table->json('additions')->nullable();
             $table->text('text');

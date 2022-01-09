@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\Api\Auth\UserResource;
+use App\Http\Resources\Api\UserResource;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 

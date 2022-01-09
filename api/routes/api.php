@@ -3,16 +3,11 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-Route::middleware('auth:sanctum')->get(
-    '/user',
-    function (Request $request) {
-        return $request->user();
-    }
-);
 
 Route::group(
     [
@@ -25,18 +20,22 @@ Route::group(
     }
 );
 
-//Route::group(
-//    ['middleware' => 'auth:sanctum'],
-//    static function () {
-//        Route::post('logout', [AuthController::class, 'logout']);
-//    }
-//);
-
 Route::group(
-    ['prefix' => 'message'],
+    ['middleware' => 'auth:sanctum'],
     static function () {
-        //
+        Route::apiResource('rooms', RoomController::class)->only(['index', 'show', 'store']);
+        Route::post('rooms/{room}/user/{user}', [RoomController::class, 'addMember']);
+
+        Route::apiResource('messages', MessageController::class);
+
+        Route::get('user/rooms', [RoomController::class, 'listByUser']);
+        Route::get(
+            '/user',
+            function (Request $request) {
+                return $request->user();
+            }
+        );
     }
 );
 
-Route::resource('users', UserController::class)->only(['index', 'show']);
+Route::apiResource('users', UserController::class)->only(['index', 'show']);

@@ -1,3 +1,5 @@
+import { Link, useParams } from "react-router-dom";
+
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -14,6 +16,7 @@ import {
   Settings,
   MoreVert,
   InsertDriveFile,
+  Add,
 } from "@mui/icons-material";
 
 import Photo0 from "../../../../modules/features/users/0.jpg";
@@ -61,6 +64,8 @@ const DOCUMENTS = [
 ];
 
 export const ChatDrawer = () => {
+  const { id } = useParams<{ id: string }>();
+
   return (
     <Drawer
       sx={{
@@ -126,6 +131,15 @@ export const ChatDrawer = () => {
             />
           </ListItem>
         ))}
+        <ListItem
+          component={Link}
+          to={`/chats/${id}/users`}
+          button
+          sx={{ color: "rgba(33, 150, 243, 0.64)" }}
+        >
+          <ListItemText primary="Добавить пользователя" />
+          <Add />
+        </ListItem>
       </List>
       <Divider />
       <Box sx={{ padding: "16px", paddingBottom: 0 }}>

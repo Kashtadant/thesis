@@ -3,17 +3,41 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Typography from "@mui/material/Typography";
 
-const USERS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+import { IUser } from "../../features/users";
 
-export const UsersSelection = () => {
+interface IUsersSelectionProps {
+  users: IUser[];
+  name: string;
+  value: number[];
+  onChange: (event: React.ChangeEvent<any>) => void;
+}
+
+export const UsersSelection = ({
+  users,
+  name,
+  value,
+  onChange,
+}: IUsersSelectionProps) => {
+  const onCheckboxChange =
+    (id: number) =>
+    (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+      const newValue = value.filter((v) => v !== id);
+      if (checked) {
+        newValue.push(id);
+      }
+      onChange({ target: { name, value: newValue } } as any);
+    };
+
   return (
     <Box>
-      {USERS.map((user) => (
+      {users.map((user) => (
         <FormControlLabel
-          key={user}
+          key={user.id}
           control={
             <Checkbox
               color="secondary"
+              checked={value.includes(user.id)}
+              onChange={onCheckboxChange(user.id)}
               sx={{ position: "relative", top: "-9.5px" }}
             />
           }
@@ -24,14 +48,14 @@ export const UsersSelection = () => {
                 color="black.main"
                 sx={{ lineHeight: "16px", marginBottom: "4px" }}
               >
-                Дорофеева Клавдия Олеговна
+                {user.full_name}
               </Typography>
               <Typography
                 variant="caption"
                 color="black.inactive"
                 sx={{ lineHeight: "14px" }}
               >
-                Владелец
+                {user.position}
               </Typography>
             </Box>
           }

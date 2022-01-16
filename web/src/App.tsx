@@ -1,12 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
+import { SessionProvider } from "./modules/features/session";
+
 import { Auth } from "./pages/Auth";
-import { Chat } from "./pages/Chat";
-import { ChatForm } from "./pages/ChatForm";
-import { ChatUsers } from "./pages/ChatUsers";
+import { Chats } from "./pages/Chats";
 
 const theme = createTheme({
   palette: {
@@ -161,16 +161,17 @@ const theme = createTheme({
 
 export const App = () => {
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Routes>
-          <Route path="auth/*" element={<Auth />} />
-          <Route path="chats/new" element={<ChatForm />} />
-          <Route path="chats/:id/users" element={<ChatUsers />} />
-          <Route path="chats/:id" element={<Chat />} />
-        </Routes>
-      </ThemeProvider>
-    </BrowserRouter>
+    <SessionProvider>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Routes>
+            <Route path="auth/*" element={<Auth />} />
+            <Route path="chats/*" element={<Chats />} />
+            <Route path="*" element={<Navigate to="chats" replace />} />
+          </Routes>
+        </ThemeProvider>
+      </BrowserRouter>
+    </SessionProvider>
   );
 };

@@ -8,10 +8,8 @@ use App\Http\Resources\Api\RoomResource;
 use App\Http\Resources\Api\UserResource;
 use App\Models\Room;
 use App\Models\RoomUser;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Ramsey\Collection\Collection;
 
 class RoomController
 {

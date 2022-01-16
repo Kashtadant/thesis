@@ -7,9 +7,7 @@ use App\Http\Resources\Api\FileResource;
 use App\Http\Resources\Api\MessageResource;
 use App\Models\Message;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class MessageController

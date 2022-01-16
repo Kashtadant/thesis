@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
 
     public function createUsers()
     {
-        User::create(
+        $user1 = User::create(
             [
                 "full_name" => "Владимир Быков",
                 "position"  => "Документовед",
@@ -24,8 +24,11 @@ class DatabaseSeeder extends Seeder
                 "password"  => \Hash::make("bykov@thesis.ru"),
             ]
         );
+        $user1->addMedia(public_path("seeds/avatars/{$user1->id}.png"))->toMediaCollection(
+            'avatars'
+        );
 
-        User::create(
+        $user2 = User::create(
             [
                 "full_name" => "Аня Матвеева",
                 "position"  => "Бухгалтер",
@@ -33,8 +36,12 @@ class DatabaseSeeder extends Seeder
                 "password"  => \Hash::make("matveeva@thesis.ru"),
             ]
         );
+        $user2->addMedia(public_path("seeds/avatars/{$user2->id}.png"))->toMediaCollection(
+            'avatars'
+        );
 
-        User::create(
+
+        $user3 = User::create(
             [
                 "full_name" => "Вадим Нестеренко",
                 "position"  => "Директор",
@@ -42,8 +49,12 @@ class DatabaseSeeder extends Seeder
                 "password"  => \Hash::make("nesterenko@thesis.ru"),
             ]
         );
+        $user3->addMedia(public_path("seeds/avatars/{$user3->id}.png"))->toMediaCollection(
+            'avatars'
+        );
 
-        User::create(
+
+        $user4 = User::create(
             [
                 "full_name" => "Денис Соболь",
                 "position"  => "Владелец",
@@ -51,14 +62,21 @@ class DatabaseSeeder extends Seeder
                 "password"  => \Hash::make("sobol@site.ru"),
             ]
         );
+        $user4->addMedia(public_path("seeds/avatars/{$user4->id}.png"))->toMediaCollection(
+            'avatars'
+        );
 
-        User::create(
+
+        $user5 = User::create(
             [
                 "full_name" => "Мария Диденко",
                 "position"  => "Зам директора",
                 "email"     => "didenko@thesis.ru",
                 "password"  => \Hash::make("didenko@thesis.ru"),
             ]
+        );
+        $user5->addMedia(public_path("seeds/avatars/{$user5->id}.png"))->toMediaCollection(
+            'avatars'
         );
     }
 
@@ -74,4 +92,6 @@ class DatabaseSeeder extends Seeder
             $room1->users()->attach($user->id);
         }
     }
+
+
 }

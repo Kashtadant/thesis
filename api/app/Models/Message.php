@@ -5,21 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Message extends Model
+class Message extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     protected $fillable = [
         'user_id',
         'room_id',
         'type',
-        'additions',
+        'votes',
+        'participants',
         'text',
     ];
 
     protected $hidden = [
-        'updated_at',
+        'created_at',
     ];
 
     public function user(): BelongsTo
@@ -30,5 +34,10 @@ class Message extends Model
     public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function file()
+    {
+        return $this->getMedia('file')->first();
     }
 }

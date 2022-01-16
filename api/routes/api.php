@@ -24,11 +24,13 @@ Route::group(
     ['middleware' => 'auth:sanctum'],
     static function () {
         Route::apiResource('rooms', RoomController::class)->only(['index', 'show', 'store']);
-        Route::post('rooms/{room}/user/{user}', [RoomController::class, 'addMember']);
+        Route::post('rooms/{room}/users', [RoomController::class, 'addMembers']);
 
         Route::apiResource('messages', MessageController::class);
+        Route::get('recent_files', [MessageController::class, 'getRecentFiles']);
 
         Route::get('user/rooms', [RoomController::class, 'listByUser']);
+        Route::post('user/update_avatar', [UserController::class, 'updateAvatar']);
         Route::get(
             '/user',
             function (Request $request) {

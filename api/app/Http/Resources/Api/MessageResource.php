@@ -10,14 +10,27 @@ class MessageResource extends JsonResource
 {
     public function toArray($request): array
     {
-        return [
-            'id'         => $this->id,
-            'user_id'    => $this->user_id,
-            'room_id'    => $this->room_id,
-            'type'       => $this->type,
-            'additions'  => $this->additions,
-            'text'       => $this->text,
-            'created_at' => $this->created_at,
-        ];
+        if ($this->type == 'poll') {
+            return [
+                'id'           => $this->id,
+                'user_id'      => $this->user_id,
+                'room_id'      => $this->room_id,
+                'type'         => $this->type,
+                'votes'        => $this->votes,
+                'participants' => $this->text,
+                'result'       => $this->result,
+                'file'         => FileResource::make($this->file()) ?? null,
+                'updated_at'   => $this->updated_at,
+            ];
+        } else {
+            return [
+                'id'           => $this->id,
+                'user_id'      => $this->user_id,
+                'room_id'      => $this->room_id,
+                'type'         => $this->type,
+                'file'         => FileResource::make($this->file()) ?? null,
+                'updated_at'   => $this->updated_at,
+            ];
+        }
     }
 }

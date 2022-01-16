@@ -8,9 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RoomUser extends Model
 {
+    protected $table = 'room_user';
+
     protected $fillable = [
         "room_id",
         "user_id",
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
     ];
 
     public function room(): BelongsTo

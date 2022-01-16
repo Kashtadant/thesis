@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\MessageRequest;
+use App\Http\Resources\Api\FileResource;
 use App\Http\Resources\Api\MessageResource;
 use App\Models\Message;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class MessageController
 {
@@ -21,43 +24,39 @@ class MessageController
     public function store(MessageRequest $request): MessageResource
     {
         $data = $request->validated();
+        $data['user_id'] = $request->user()->id;
 
         $message = Message::create($data);
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $message->addMedia($file)->toMediaCollection('file');
+        }
 
         return MessageResource::make($message);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Message $message
-     * @return Response
-     */
-    public function show(Message $message)
+    public function show(Message $message): MessageResource
     {
-        //
+        return MessageResource::make($message);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Message $message
-     * @return Response
-     */
-    public function update(Request $request, Message $message)
+//    public function update(Request $request, Message $message): Response
+//    {
+//        //
+//    }
+
+    public function destroy(Message $message): JsonResponse
     {
-        //
+        $message->delete();
+
+        return response()->json([], 204);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Message $message
-     * @return Response
-     */
-    public function destroy(Message $message)
+    public function getRecentFiles(): AnonymousResourceCollection
     {
-        //
+        $files = Media::where('collection_name', 'file')->limit(7)->get();
+
+        return FileResource::collection($files);
     }
 }

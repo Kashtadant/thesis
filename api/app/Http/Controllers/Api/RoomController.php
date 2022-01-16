@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\AddMembersRequest;
 use App\Http\Requests\RoomRequest;
 use App\Http\Resources\Api\RoomResource;
+use App\Http\Resources\Api\UserResource;
 use App\Models\Room;
+use App\Models\RoomUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Ramsey\Collection\Collection;
 
 class RoomController
 {
@@ -39,15 +44,18 @@ class RoomController
         return RoomResource::make($room);
     }
 
-    public function addMember(): void
+    public function addMembers(AddMembersRequest $request): AnonymousResourceCollection
     {
         $roomId = request()->route()->parameter('room');
-        $userId = request()->route()->parameter('user');
+        $userIds = $request->validated()['members'];
 
         $room = Room::findOrFail($roomId);
+        RoomUser::where('room_id', $room->id)->delete();
 
-        if (!$room->users->contains($userId)) {
+        foreach (json_decode($userIds) as $userId) {
             $room->users()->attach($userId);
         }
+
+        return UserResource::collection($room->users);
     }
 }

@@ -12,8 +12,9 @@ class CreateMessagesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('room_id');
-            $table->enum('type', ['message', 'poll', 'result']);
-            $table->json('additions')->nullable();
+            $table->enum('type', ['message', 'poll']);
+            $table->json('votes')->nullable();
+            $table->json('participants')->nullable();
             $table->text('text');
             $table->timestamps();
         });

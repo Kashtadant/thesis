@@ -10,7 +10,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-//        $this->createUsers();
+        $this->createUsers();
         $this->createRooms();
     }
 
@@ -71,7 +71,7 @@ class DatabaseSeeder extends Seeder
         );
 
         foreach (User::all() as $user) {
-            $room1->users()->create([$user->id])->save();
+            $room1->users()->attach($user->id);
         }
     }
 }

@@ -31,6 +31,7 @@ class UserController
         $user = $request->user();
         $avatar = $request->file('avatar');
 
+        $user->clearMediaCollection('avatars');
         $user->addMedia($avatar)->toMediaCollection('avatars');
     }
 }

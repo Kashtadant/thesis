@@ -40,7 +40,7 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsToMany(Room::class);
     }
 
-    public function avatar(): string
+    public function avatar()
     {
         return $this->getFirstMediaUrl('avatars');
     }

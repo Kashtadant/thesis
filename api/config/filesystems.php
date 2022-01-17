@@ -13,6 +13,7 @@ return [
     |
     */
 
+    // Можно заменить default с local на public
     'default' => env('FILESYSTEM_DRIVER', 'local'),
 
     /*

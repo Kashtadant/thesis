@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Resources\Api\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,16 +26,20 @@ Route::group(
     static function () {
         Route::apiResource('rooms', RoomController::class)->only(['index', 'show', 'store']);
         Route::post('rooms/{room}/users', [RoomController::class, 'addMembers']);
+        Route::get('rooms/{room}/messages', [MessageController::class, 'index']);
 
-        Route::apiResource('messages', MessageController::class);
+        Route::apiResource('messages', MessageController::class)->except('index');
         Route::get('recent_files', [MessageController::class, 'getRecentFiles']);
+
+        Route::get("messages/{message}/accept", [MessageController::class, 'accept']);
+        Route::get("messages/{message}/decline", [MessageController::class, 'decline']);
 
         Route::get('user/rooms', [RoomController::class, 'listByUser']);
         Route::post('user/update_avatar', [UserController::class, 'updateAvatar']);
         Route::get(
             '/user',
             function (Request $request) {
-                return $request->user();
+                return UserResource::make($request->user());
             }
         );
     }

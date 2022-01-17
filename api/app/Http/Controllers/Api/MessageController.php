@@ -7,14 +7,16 @@ use App\Http\Resources\Api\FileResource;
 use App\Http\Resources\Api\MessageResource;
 use App\Models\Message;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class MessageController
 {
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $messages = Message::all();
+        $roomId = request()->route()->parameter('room');
+        $messages = Message::whereRoomId($roomId)->orderBy('created_at')->get();
 
         return MessageResource::collection($messages);
     }
@@ -39,10 +41,37 @@ class MessageController
         return MessageResource::make($message);
     }
 
-//    public function update(Request $request, Message $message): Response
-//    {
-//        //
-//    }
+    public function accept(Message $message): MessageResource
+    {
+        $user = request()->user();
+        $votes = json_decode($message->getAttribute('votes'), true);
+
+        if (!in_array($user->id, $votes['accepted']) && !in_array($user->id, $votes['declined'])) {
+            $votes['accepted'][] = $user->id;
+            $message->setAttribute('votes', json_encode($votes));
+            $message->save();
+        }
+
+        $message = Message::findOrFail($message->id);
+
+        return MessageResource::make($message);
+    }
+
+    public function decline(Message $message)
+    {
+        $user = request()->user();
+        $votes = json_decode($message->getAttribute('votes'), true);
+
+        if (!in_array($user->id, $votes['accepted']) && !in_array($user->id, $votes['declined'])) {
+            $votes['declined'][] = $user->id;
+            $message->setAttribute('votes', json_encode($votes));
+            $message->save();
+        }
+
+        $message = Message::findOrFail($message->id);
+
+        return MessageResource::make($message);
+    }
 
     public function destroy(Message $message): JsonResponse
     {

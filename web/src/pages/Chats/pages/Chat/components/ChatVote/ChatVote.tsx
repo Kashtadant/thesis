@@ -97,25 +97,25 @@ export const ChatVote: React.FC<IChatVoteProps> = ({
             </Button>
           </Box>
         )}
-      {false && (
-        <Box>
+      {message.result !== null && (
+        <Box sx={{ marginTop: "13px" }}>
           <Button
             variant="contained"
-            color="primary"
+            color={message.result ? "primary" : "error"}
             disabled
             fullWidth
             sx={{
               "&.Mui-disabled": {
-                backgroundColor: "primary.light",
+                backgroundColor: message.result ? "primary.light" : "#f8c4c4",
                 color: "primary.contrastText",
               },
             }}
           >
-            Было принято
+            {message.result ? "Было принято" : "Было отклонено"}
           </Button>
         </Box>
       )}
-      {message.result !== null && (
+      {false && (
         <Box sx={{ display: "flex", gap: "14px", marginTop: "13px" }}>
           <Button
             variant="outlined"

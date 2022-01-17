@@ -20,15 +20,22 @@ export const createMessage = (room_id: number, text: string) => {
 export const createPoll = (
   room_id: number,
   text: string,
-  participants: number[]
+  participants: number[],
+  file: File
 ) => {
+  const formData = new FormData();
+  formData.append("type", "poll");
+  formData.append("text", "text");
+  formData.append("room_id", room_id.toString());
+  formData.append("participants", JSON.stringify(participants));
+  formData.append("votes", JSON.stringify({ accepted: [], declined: [] }));
+  formData.append("file", file);
+
   return request
-    .post<{ data: IMessage }>("/api/messages", {
-      type: "poll",
-      text,
-      room_id,
-      participants: JSON.stringify(participants),
-      votes: JSON.stringify({ accepted: [], declined: [] }),
+    .post<{ data: IMessage }>("/api/messages", formData, {
+      headers: {
+        "Content-Type": `multipart/form-data`,
+      },
     })
     .then((r) => r.data.data);
 };

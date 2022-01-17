@@ -110,7 +110,12 @@ export const ChatHeader = ({ room, rooms }: IChatHeaderProps) => {
         {rooms
           .filter((r) => r.id !== room.id)
           .map((r) => (
-            <MenuItem component={Link} to={`../${r.id}`} onClick={onClose}>
+            <MenuItem
+              key={r.id}
+              component={Link}
+              to={`../${r.id}`}
+              onClick={onClose}
+            >
               {r.name}
             </MenuItem>
           ))}

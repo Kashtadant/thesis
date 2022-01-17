@@ -1,11 +1,10 @@
+import { IFile } from "../files";
+
 export interface IBaseMessage {
   id: number;
   text: string;
   user_id: number;
-  file?: {
-    name: string;
-    url: string;
-  };
+  file?: IFile;
 }
 
 export interface ITextMessage extends IBaseMessage {
@@ -22,4 +21,8 @@ export interface IPollMessage extends IBaseMessage {
   result: null;
 }
 
-export type IMessage = ITextMessage | IPollMessage;
+export interface IDownloadMessage extends IBaseMessage {
+  type: "download";
+}
+
+export type IMessage = ITextMessage | IPollMessage | IDownloadMessage;

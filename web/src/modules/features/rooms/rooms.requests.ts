@@ -1,4 +1,5 @@
 import { request } from "../../common/request";
+import { IFile } from "../files";
 import { IRoom } from "./rooms.types";
 
 export const getRooms = () => {
@@ -24,5 +25,11 @@ export const updateRoomUsers = (id: number, members: number[]) => {
     .post<{ data: IRoom }>(`/api/rooms/${id}/users`, {
       members: JSON.stringify(members),
     })
+    .then((r) => r.data.data);
+};
+
+export const getRoomFiles = (id: number) => {
+  return request
+    .get<{ data: IFile[] }>(`api/recent_files`)
     .then((r) => r.data.data);
 };

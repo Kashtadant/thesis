@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 
 import { useParams } from "react-router-dom";
 
@@ -15,6 +15,7 @@ import { ChatMessages } from "./components/ChatMessages";
 import { ChatTextarea } from "./components/ChatTextarea";
 import { ChatVote } from "./components/ChatVote";
 import { ChatText } from "./components/ChatText";
+import { ChatVoteResult } from "./components/ChatVoteResult";
 
 interface IChatProps {
   user: IUser;
@@ -22,6 +23,7 @@ interface IChatProps {
 
 export const Chat = ({ user }: IChatProps) => {
   const { id } = useParams<{ id: string }>();
+  const isBottom = useRef(false);
 
   const [room, setRoom] = useState<IRoom | null>(null);
   const [isRoomFetching, setRoomFetching] = useState(true);
@@ -29,6 +31,29 @@ export const Chat = ({ user }: IChatProps) => {
   const [isRoomsFetching, setRoomsFetching] = useState(true);
 
   const [messages, setMessages] = useState<IMessage[]>([]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      isBottom.current =
+        document.documentElement.scrollTop +
+          document.documentElement.clientHeight >=
+        document.documentElement.scrollHeight - 1;
+    };
+
+    window.addEventListener("scroll", onScroll);
+    onScroll();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isBottom.current) {
+      document.documentElement.scrollTop =
+        document.documentElement.scrollHeight;
+    }
+  }, [messages]);
 
   useEffect(() => {
     if (id) {
@@ -101,6 +126,9 @@ export const Chat = ({ user }: IChatProps) => {
               )}
             </ChatMessage>
           ))}
+          <ChatMessage message={{} as any} user={user}>
+            <ChatVoteResult />
+          </ChatMessage>
         </ChatMessages>
         <ChatTextarea
           room={room}

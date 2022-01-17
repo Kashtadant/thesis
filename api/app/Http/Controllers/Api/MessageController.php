@@ -6,14 +6,13 @@ use App\Http\Requests\MessageRequest;
 use App\Http\Resources\Api\FileResource;
 use App\Http\Resources\Api\MessageResource;
 use App\Models\Message;
+use App\Models\Room;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class MessageController
 {
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(): AnonymousResourceCollection
     {
         $roomId = request()->route()->parameter('room');
         $messages = Message::whereRoomId($roomId)->orderBy('created_at')->get();
@@ -80,9 +79,20 @@ class MessageController
         return response()->json([], 204);
     }
 
-    public function getRecentFiles(): AnonymousResourceCollection
+    public function getRecentFiles(Room $room): AnonymousResourceCollection
     {
-        $files = Media::where('collection_name', 'file')->limit(7)->get();
+        $messages = Message::whereRoomId($room->id)->get();
+        $files = [];
+
+        if ($messages->isNotEmpty()) {
+            $finished_polls = $messages->where('result', '=', true)->sortByDesc('updated_at')->all();
+
+            foreach ($finished_polls as $poll) {
+                if ($poll->file()) {
+                    $files[] = $poll->file();
+                }
+            }
+        }
 
         return FileResource::collection($files);
     }

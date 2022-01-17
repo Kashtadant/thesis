@@ -29,7 +29,7 @@ Route::group(
         Route::get('rooms/{room}/messages', [MessageController::class, 'index']);
 
         Route::apiResource('messages', MessageController::class)->except('index');
-        Route::get('recent_files', [MessageController::class, 'getRecentFiles']);
+        Route::get('room/{room}/recent_files', [MessageController::class, 'getRecentFiles']);
 
         Route::get("messages/{message}/accept", [MessageController::class, 'accept']);
         Route::get("messages/{message}/decline", [MessageController::class, 'decline']);

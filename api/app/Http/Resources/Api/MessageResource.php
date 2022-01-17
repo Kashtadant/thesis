@@ -23,6 +23,16 @@ class MessageResource extends JsonResource
                 'file'         => FileResource::make($this->file()) ?? null,
                 'updated_at'   => $this->updated_at,
             ];
+        } elseif ($this->type == 'result') {
+            return [
+                'id'           => $this->id,
+                'user_id'      => $this->user_id,
+                'room_id'      => $this->room_id,
+                'type'         => $this->type,
+                'text'         => $this->text,
+                'file'         => FileResource::make($this->file()) ?? null,
+                'updated_at'   => $this->updated_at,
+            ];
         } else {
             return [
                 'id'           => $this->id,

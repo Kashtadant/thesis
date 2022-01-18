@@ -4,9 +4,19 @@ import { useParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 
-import { IRoom, getRoom, getRooms } from "../../../../modules/features/rooms";
-import { IMessage, getMessages } from "../../../../modules/features/messages";
+import {
+  IRoom,
+  getRoom,
+  getRooms,
+  getRoomFiles,
+} from "../../../../modules/features/rooms";
+import {
+  IMessage,
+  IResultMessage,
+  getMessages,
+} from "../../../../modules/features/messages";
 import { IUser } from "../../../../modules/features/users";
+import { IFile } from "../../../../modules/features/files";
 
 import { ChatDrawer } from "./components/ChatDrawer";
 import { ChatHeader } from "./components/ChatHeader";
@@ -31,6 +41,9 @@ export const Chat = ({ user }: IChatProps) => {
   const [isRoomsFetching, setRoomsFetching] = useState(true);
 
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [files, setFiles] = useState<IFile[]>([]);
+
+  const [hidden, setHidden] = useState<number[]>([]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -66,10 +79,28 @@ export const Chat = ({ user }: IChatProps) => {
         setRoomFetching(false);
         setRoomsFetching(false);
       });
+    }
+  }, [id]);
 
-      getMessages(+id).then((data) => {
-        setMessages(data);
-      });
+  useEffect(() => {
+    if (id) {
+      const getData = () => {
+        Promise.all([getMessages(+id), getRoomFiles(+id)]).then(
+          ([messages, files]) => {
+            setMessages(messages);
+            setFiles(files);
+          }
+        );
+      };
+
+      getData();
+      const interval = setInterval(() => {
+        getData();
+      }, 3000);
+
+      return () => {
+        clearInterval(interval);
+      };
     }
   }, [id]);
 
@@ -96,13 +127,17 @@ export const Chat = ({ user }: IChatProps) => {
     });
   };
 
+  const onHide = (message: IResultMessage) => {
+    setHidden(hidden.concat(message.id));
+  };
+
   if (isRoomFetching || isRoomsFetching || !room) {
     return null;
   }
 
   return (
     <Box sx={{ display: "grid", gridTemplateColumns: "256px 1fr" }}>
-      <ChatDrawer room={room} user={user} />
+      <ChatDrawer room={room} user={user} files={files} />
       <Box
         sx={{
           minHeight: "100vh",
@@ -112,23 +147,29 @@ export const Chat = ({ user }: IChatProps) => {
       >
         <ChatHeader room={room} rooms={rooms} />
         <ChatMessages>
-          {messages.map((message) => (
-            <ChatMessage
-              key={message.id}
-              message={message}
-              user={usersMap[message.user_id]}
-            >
-              {message.type === "message" && (
-                <ChatText>{message.text}</ChatText>
-              )}
-              {message.type === "poll" && (
-                <ChatVote message={message} user={user} onVote={onVote} />
-              )}
-            </ChatMessage>
-          ))}
-          <ChatMessage message={{} as any} user={user}>
-            <ChatVoteResult />
-          </ChatMessage>
+          {messages.map((message) => {
+            if (hidden.includes(message.id)) {
+              return null;
+            }
+
+            return (
+              <ChatMessage
+                key={message.id}
+                message={message}
+                user={usersMap[message.user_id]}
+              >
+                {message.type === "message" && (
+                  <ChatText>{message.text}</ChatText>
+                )}
+                {message.type === "poll" && (
+                  <ChatVote message={message} user={user} onVote={onVote} />
+                )}
+                {message.type === "result" && (
+                  <ChatVoteResult message={message} onHide={onHide} />
+                )}
+              </ChatMessage>
+            );
+          })}
         </ChatMessages>
         <ChatTextarea
           room={room}

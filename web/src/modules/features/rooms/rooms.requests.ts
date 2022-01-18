@@ -30,6 +30,6 @@ export const updateRoomUsers = (id: number, members: number[]) => {
 
 export const getRoomFiles = (id: number) => {
   return request
-    .get<{ data: IFile[] }>(`api/recent_files`)
+    .get<{ data: IFile[] }>(`/api/room/${id}/recent_files`)
     .then((r) => r.data.data);
 };

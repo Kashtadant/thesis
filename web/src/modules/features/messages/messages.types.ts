@@ -21,8 +21,8 @@ export interface IPollMessage extends IBaseMessage {
   result: null;
 }
 
-export interface IDownloadMessage extends IBaseMessage {
-  type: "download";
+export interface IResultMessage extends IBaseMessage {
+  type: "result";
 }
 
-export type IMessage = ITextMessage | IPollMessage | IDownloadMessage;
+export type IMessage = ITextMessage | IPollMessage | IResultMessage;

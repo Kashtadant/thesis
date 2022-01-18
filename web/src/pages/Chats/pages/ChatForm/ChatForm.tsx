@@ -142,6 +142,7 @@ export const ChatForm = ({ user }: IChatFormProps) => {
               marginRight: "14px",
               height: "36px",
             }}
+            onClick={() => window.history.back()}
           >
             Отмена
           </Button>

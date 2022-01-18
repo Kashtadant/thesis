@@ -2,13 +2,17 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-import { IDownloadMessage } from "../../../../../../modules/features/messages";
+import { IResultMessage } from "../../../../../../modules/features/messages";
 
 interface IChatVoteResultProps {
-  message?: IDownloadMessage;
+  message: IResultMessage;
+  onHide: (message: IResultMessage) => void;
 }
 
-export const ChatVoteResult: React.FC<IChatVoteResultProps> = ({ message }) => {
+export const ChatVoteResult: React.FC<IChatVoteResultProps> = ({
+  message,
+  onHide,
+}) => {
   return (
     <Box
       sx={{
@@ -29,7 +33,7 @@ export const ChatVoteResult: React.FC<IChatVoteResultProps> = ({ message }) => {
         Изменение утверждено
       </Typography>
       <Typography component="div" variant="caption" color="black.main">
-        Тексттекст
+        {message.text}
       </Typography>
 
       <Box sx={{ display: "flex", gap: "14px", marginTop: "13px" }}>
@@ -37,12 +41,22 @@ export const ChatVoteResult: React.FC<IChatVoteResultProps> = ({ message }) => {
           variant="outlined"
           color="inherit"
           sx={{ color: "#515151", borderColor: "#D7D7D7" }}
+          onClick={() => onHide(message)}
         >
           Скрыть
         </Button>
-        <Button variant="contained" color="success">
-          Скачать
-        </Button>
+        {!!message.file && (
+          <Button
+            component="a"
+            href={message.file.url}
+            target="_blank"
+            download
+            variant="contained"
+            color="success"
+          >
+            Скачать
+          </Button>
+        )}
       </Box>
     </Box>
   );

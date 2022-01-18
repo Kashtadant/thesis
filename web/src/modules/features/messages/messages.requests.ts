@@ -25,7 +25,7 @@ export const createPoll = (
 ) => {
   const formData = new FormData();
   formData.append("type", "poll");
-  formData.append("text", "text");
+  formData.append("text", text);
   formData.append("room_id", room_id.toString());
   formData.append("participants", JSON.stringify(participants));
   formData.append("votes", JSON.stringify({ accepted: [], declined: [] }));

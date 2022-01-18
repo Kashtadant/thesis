@@ -30,8 +30,19 @@ export const SessionProvider: FC = ({ children }) => {
       return config;
     });
 
+    const responseInterceptor = request.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error?.response?.status === 401) {
+          setSession(null);
+        }
+        return Promise.reject(error);
+      }
+    );
+
     return () => {
       request.interceptors.request.eject(requestInterceptor);
+      request.interceptors.response.eject(responseInterceptor);
     };
   }, [session]);
 

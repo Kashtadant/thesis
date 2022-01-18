@@ -100,6 +100,7 @@ export const ChatTextarea = ({
           }
           setTextPoll("");
           setParticipants([]);
+          setFile(null);
           if (fileInputRef.current) {
             fileInputRef.current.value = "";
           }
@@ -238,33 +239,35 @@ export const ChatTextarea = ({
           </Typography>
 
           <Box>
-            {room.members.map((user) => (
-              <FormControlLabel
-                key={user.id}
-                control={
-                  <Checkbox
-                    color="secondary"
-                    checked={participants.includes(user.id)}
-                    onChange={onCheckboxChange(user.id)}
-                  />
-                }
-                label={
-                  <Typography
-                    variant="body1"
-                    color="black.main"
-                    sx={{ lineHeight: "16px" }}
-                  >
-                    {user.full_name}
-                  </Typography>
-                }
-                sx={{
-                  width: "100%",
-                  "&:not(:last-child)": {
-                    marginBottom: "-8px",
-                  },
-                }}
-              />
-            ))}
+            {room.members
+              .filter((u) => u.id !== user.id)
+              .map((user) => (
+                <FormControlLabel
+                  key={user.id}
+                  control={
+                    <Checkbox
+                      color="secondary"
+                      checked={participants.includes(user.id)}
+                      onChange={onCheckboxChange(user.id)}
+                    />
+                  }
+                  label={
+                    <Typography
+                      variant="body1"
+                      color="black.main"
+                      sx={{ lineHeight: "16px" }}
+                    >
+                      {user.full_name}
+                    </Typography>
+                  }
+                  sx={{
+                    width: "100%",
+                    "&:not(:last-child)": {
+                      marginBottom: "-8px",
+                    },
+                  }}
+                />
+              ))}
           </Box>
         </Box>
         <DialogActions>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { Link, useParams } from "react-router-dom";
 
@@ -23,18 +23,18 @@ import {
   Add,
 } from "@mui/icons-material";
 
-import { getRoomFiles, IRoom } from "../../../../../../modules/features/rooms";
+import { IRoom } from "../../../../../../modules/features/rooms";
 import { IUser } from "../../../../../../modules/features/users";
 import { IFile } from "../../../../../../modules/features/files";
 
 interface IChatDrawerProps {
   room: IRoom;
   user: IUser;
+  files: IFile[];
 }
 
-export const ChatDrawer = ({ room, user }: IChatDrawerProps) => {
+export const ChatDrawer = ({ room, user, files }: IChatDrawerProps) => {
   const { id } = useParams<{ id: string }>();
-  const [files, setFiles] = useState<IFile[]>([]);
 
   const [userAnchorEl, setUserAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -58,14 +58,6 @@ export const ChatDrawer = ({ room, user }: IChatDrawerProps) => {
   const onDocumentClose = () => {
     setDocumentAnchorEl(null);
   };
-
-  useEffect(() => {
-    if (id) {
-      getRoomFiles(+id).then((data) => {
-        setFiles(data);
-      });
-    }
-  }, []);
 
   return (
     <>

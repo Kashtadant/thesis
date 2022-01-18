@@ -18,7 +18,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Show the user a form to change their personal information & password.
+     * Показывает информацию о пользователе
      */
     public function getAccountInfoForm()
     {
@@ -29,7 +29,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Save the modified personal information for a user.
+     * Сохраняет изменённые данные о пользователе
      */
     public function postAccountInfoForm(AccountInfoRequest $request)
     {
@@ -45,12 +45,12 @@ class ProfileController extends Controller
     }
 
     /**
-     * Save the new password for a user.
+     * Обновляет пароль пользователя
      */
     public function postChangePasswordForm(ChangePasswordRequest $request)
     {
         $user = $this->guard()->user();
-        $user->password = Hash::make($request->new_password);
+        $user->password = Hash::make($request->get('new_password'));
 
         if ($user->save()) {
             Alert::success(trans('backpack::base.account_updated'))->flash();
@@ -62,7 +62,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Get the guard to be used for account manipulation.
+     * Проверяет настройки доступа для сохранения данных
      *
      * @return \Illuminate\Contracts\Auth\StatefulGuard
      */

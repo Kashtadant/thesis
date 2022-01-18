@@ -6,15 +6,9 @@ use App\Http\Requests\UserRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
-/**
- * Class UserCrudController
- * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class UserCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
@@ -28,6 +22,15 @@ class UserCrudController extends CrudController
 
     protected function setupListOperation()
     {
+        CRUD::column('id')->label('№');
+        CRUD::column('full_name')->label('ФИО');
+        CRUD::column('position')->label('Должность');
+        CRUD::column('email');
+    }
+
+    protected function setupShowOperation()
+    {
+        CRUD::column('id')->label('№');
         CRUD::column('full_name')->label('ФИО');
         CRUD::column('position')->label('Должность');
         CRUD::column('email');

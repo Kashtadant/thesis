@@ -70,6 +70,9 @@ export const Chat = ({ user }: IChatProps) => {
 
   useEffect(() => {
     if (id) {
+      setRoom(null);
+      setMessages([]);
+      setFiles([]);
       setRoomFetching(true);
       setRoomFetching(true);
 

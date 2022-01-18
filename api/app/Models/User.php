@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Backpack\CRUD\app\Models\Traits\HasIdentifiableAttribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,6 +18,8 @@ class User extends Authenticatable implements HasMedia
     use HasFactory;
     use Notifiable;
     use InteractsWithMedia;
+    use CrudTrait;
+    use HasIdentifiableAttribute;
 
     protected $fillable = [
         'full_name',

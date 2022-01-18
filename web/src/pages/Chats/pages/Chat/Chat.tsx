@@ -4,19 +4,13 @@ import { useParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 
-import {
-  IRoom,
-  getRoom,
-  getRooms,
-  getRoomFiles,
-} from "../../../../modules/features/rooms";
+import { IRoom, getRoom, getRooms } from "../../../../modules/features/rooms";
 import {
   IMessage,
   IResultMessage,
   getMessages,
 } from "../../../../modules/features/messages";
 import { IUser } from "../../../../modules/features/users";
-import { IFile } from "../../../../modules/features/files";
 
 import { ChatDrawer } from "./components/ChatDrawer";
 import { ChatHeader } from "./components/ChatHeader";
@@ -41,8 +35,6 @@ export const Chat = ({ user }: IChatProps) => {
   const [isRoomsFetching, setRoomsFetching] = useState(true);
 
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const [files, setFiles] = useState<IFile[]>([]);
-
   const [hidden, setHidden] = useState<number[]>([]);
 
   useEffect(() => {
@@ -72,7 +64,6 @@ export const Chat = ({ user }: IChatProps) => {
     if (id) {
       setRoom(null);
       setMessages([]);
-      setFiles([]);
       setRoomFetching(true);
       setRoomFetching(true);
 
@@ -88,12 +79,9 @@ export const Chat = ({ user }: IChatProps) => {
   useEffect(() => {
     if (id) {
       const getData = () => {
-        Promise.all([getMessages(+id), getRoomFiles(+id)]).then(
-          ([messages, files]) => {
-            setMessages(messages);
-            setFiles(files);
-          }
-        );
+        getMessages(+id).then((messages) => {
+          setMessages(messages);
+        });
       };
 
       getData();
@@ -116,6 +104,12 @@ export const Chat = ({ user }: IChatProps) => {
       return acc;
     }, {} as Record<number, IUser>);
   }, [room]);
+
+  const files = useMemo(() => {
+    return messages
+      .filter((m) => m.type === "poll" && m.result === null && !!m.file)
+      .map((m) => m.file!);
+  }, [messages]);
 
   const onCreateMessage = (message: IMessage) => {
     setMessages((prevMessages) => prevMessages.concat(message));

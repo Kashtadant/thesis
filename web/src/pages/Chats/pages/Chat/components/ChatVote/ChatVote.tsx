@@ -59,6 +59,15 @@ export const ChatVote: React.FC<IChatVoteProps> = ({
         maxWidth: "490px",
       }}
     >
+      {message.result === null && (
+        <Typography
+          component="div"
+          variant="overline"
+          sx={{ color: "#0C0C0C", marginBottom: "13px" }}
+        >
+          На утверждении
+        </Typography>
+      )}
       <Typography component="div" variant="caption" color="black.main">
         {message.text}
       </Typography>
@@ -112,20 +121,6 @@ export const ChatVote: React.FC<IChatVoteProps> = ({
             }}
           >
             {message.result ? "Было принято" : "Было отклонено"}
-          </Button>
-        </Box>
-      )}
-      {false && (
-        <Box sx={{ display: "flex", gap: "14px", marginTop: "13px" }}>
-          <Button
-            variant="outlined"
-            color="inherit"
-            sx={{ color: "#515151", borderColor: "#D7D7D7" }}
-          >
-            Скрыть
-          </Button>
-          <Button variant="contained" color="primary">
-            Скачать
           </Button>
         </Box>
       )}
